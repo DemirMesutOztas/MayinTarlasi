@@ -48,5 +48,22 @@ public class Main
             System.out.println("");
         }
 
+        for(int i =0; i<sample.tahtaOyun.length;i++)
+        {
+            for(int j=0; j<sample.tahtaOyun[i].length;j++)
+            {
+                System.out.print(sample.tahtaOyun[i][j]);
+            }
+            System.out.println("");
+
+        }
+       // System.out.println(sample.tahtaHarita.length +" - " +sample.tahtaHarita[2].length);
+/*
+
+        System.out.print("TAhmin Satır koordinat: ");
+        int h2 = in.nextInt();
+        System.out.print("TAhmin Sütun koordinat: ");
+        int w2 = in.nextInt();
+*/
     }
 }
