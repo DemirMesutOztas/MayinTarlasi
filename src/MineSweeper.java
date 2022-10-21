@@ -138,6 +138,7 @@ public class MineSweeper
                 if(this.tahtaHarita[x][y+1]==" * ")
                 {
                     counter++;
+
                 }
             }
             if(y>0)
