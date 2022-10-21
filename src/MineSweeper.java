@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,38 +20,34 @@ public class MineSweeper
         this.tahtaHarita = new String[this.height][this.weight];
         this.doldur();
         this.mayinDoldur();
-        //this.doldurSayi(this.tahtaHarita);
-
 
     }
 
     void doldur()
     {
-
         for(int i = 0; i<this.tahta.length; i++)
         {
             for(int j = 0; j<this.tahta[i].length; j++)
             {
-
                 this.tahta[i][j]=" - ";
             }
-
         }
+
         for(int i = 0; i<this.tahtaHarita.length; i++)
         {
             for(int j = 0; j<this.tahtaHarita[i].length; j++)
             {
-
                 this.tahtaHarita[i][j]=" - ";
             }
-
         }
+
     }
      void mayinDoldur()
     {
         Random r = new Random();
         int ara, ara2;
         int mayin=this.x;
+
         while(mayin>0)
         {
             ara = r.nextInt(this.height);
@@ -67,7 +62,6 @@ public class MineSweeper
         }
 
     }
-
     void run()
     {
         this.tahtaNumber = new String[this.height][this.weight];
@@ -75,7 +69,6 @@ public class MineSweeper
         boolean durum = true;
 
         do {
-
             System.out.println("Satır giriniz:");
             int row = out.nextInt();
 
@@ -94,23 +87,21 @@ public class MineSweeper
                 continue;
             }
 
-            int sayi2;
+            int sayi2 = this.control(row, column);
 
-            sayi2= this.control(row, column);
             if(sayi2==-500)
             {
                 System.out.println("Mayına bastınız. Oyun bitti!");
                 String sayi=" * ";
                 durum=false;
                 tahta[row][column]=sayi;
-                System.out.println("/////////////");
+                System.out.println("GAME OVER \n");
                 this.print(tahta);
 
             }
             else
             {
                 tahta[row][column]= " " + sayi2 + " ";
-                System.out.println("/////////////");
                 this.print(tahta);
             }
 
@@ -121,8 +112,7 @@ public class MineSweeper
     int control(int x, int y)
     {
         int counter=0;
-        System.out.println(x+"-"+y+"-"+tahtaHarita[x][y]);
-
+       // System.out.println(x+"-"+y+"-"+tahtaHarita[x][y]);
         if(this.tahtaHarita[x][y]==" * ")
         {
             return -500;
@@ -134,9 +124,7 @@ public class MineSweeper
                 if(this.tahtaHarita[x+1][y]==" * ")
                 {
                     counter++;
-                    System.out.println("???");
                 }
-
             }
             if(x>0)//üst
             {
@@ -178,8 +166,6 @@ public class MineSweeper
                 if(this.tahtaHarita[x+1][y-1]==" * ")//solAltÇArpraz
                 {
                     counter++;
-                    System.out.println("?");
-
                 }
             }
             if(x>0 && y+1<this.weight-1)
@@ -187,7 +173,6 @@ public class MineSweeper
                 if(this.tahtaHarita[x-1][y+1]==" * ")//sağÜstÇArpraz
                 {
                     counter++;
-                    System.out.println("?");
                 }
             }
 
@@ -207,7 +192,6 @@ public class MineSweeper
             System.out.println("");
         }
     }
-
 
 
 }
