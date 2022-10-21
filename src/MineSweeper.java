@@ -1,15 +1,15 @@
-import java.util.Arrays;
+import java.sql.SQLOutput;
 import java.util.Random;
+import java.util.Scanner;
 
 public class MineSweeper
 {
     int weight, height;
     int x;
-    int [][] mayin = new int[x][2];
     String [][] tahta = new String[weight][height];
     String [][] tahtaHarita = new String[weight][height];
+    String [][] tahtaNumber= new String[weight][height];
 
-    String [][] tahtaOyun = new String[weight][height];
 
 
     MineSweeper(int w, int h)
@@ -19,10 +19,10 @@ public class MineSweeper
         this.x = (w*h)/4;
         this.tahta = new String[this.height][this.weight];
         this.tahtaHarita = new String[this.height][this.weight];
-        this.tahtaOyun = new String[this.height][this.weight];
         this.doldur();
-        this.mayinArea();
-        this.doldurSayi(this.tahtaHarita);
+        this.mayinDoldur();
+        //this.doldurSayi(this.tahtaHarita);
+
 
     }
 
@@ -48,101 +48,165 @@ public class MineSweeper
 
         }
     }
-     void mayinArea()
+     void mayinDoldur()
     {
-
         Random r = new Random();
-        this.mayin = new int[this.x][2];
         int ara, ara2;
-
-        int []tekDizi = new int[this.x];
-
-        for(int j = 0 ;j<this.x; j++)
+        int mayin=this.x;
+        while(mayin>0)
         {
             ara = r.nextInt(this.height);
             ara2 = r.nextInt(this.weight);
 
+            if(this.tahtaHarita[ara][ara2]!=" * ")
+            {
+                this.tahtaHarita[ara][ara2]=" * ";
+                mayin--;
+            }
 
-            this.mayin[j][0]=ara;
-            this.mayin[j][1]=ara2;
-
-
-            this.tahtaHarita[ara][ara2]= " * ";
         }
-
 
     }
 
-    void doldurSayi(String [][] map)
+    void run()
     {
-        int x, y;
-        int count=0;
+        this.tahtaNumber = new String[this.height][this.weight];
+        Scanner out = new Scanner(System.in);
+        boolean durum = true;
 
-        for(int i = 0; i<map.length; i++)
-        {
-            for(int j = 0; j<map[i].length; i++)
+        do {
+
+            System.out.println("Satır giriniz:");
+            int row = out.nextInt();
+
+            if (row > this.height-1 || row < 0)
             {
-                if(map[i][j] == " * ")
-                {
-                    continue;
+                System.out.println("Aralık dışı satır girdiniz");
+                continue;
+            }
 
-                }
-                else if(map[i][j+1] == " * " && j+1<=map[i].length) //sağ
-                {
-                    count++;
-                }
-                else if(j >=1) //sol
-                {
-                    if(map[i][j-1] == " * " )
-                        count++;
-                }
-                else if( i+1 <=map.length) //asağı
-                {
-                    System.out.println( i+1);
-                    if(map[i+1][j] == " * " )
-                        count++;
-                }
-                else if(j >= 1 ) //yukarı
-                {
-                    if(map[i][j-1] == " * " )
-                        count++;
-                }
-                else if( j>= 1 && i >= 1) //solüstçarpraz
-                {
-                    if(map[i-1][j-1] == " * ")
-                        count++;
-                }
-                else if( j+1 <= map[i].length && i >= 1) //sağüstçapraz
-                {
-                    if(map[i-1][j+1] == " * ")
-                        count++;
-                }
-                else if(i+1 <= map.length && j >= 1) //solaltçapraz
-                {
-                    if(map[i+1][j-1] == " * " )
-                        count++;
-                }
-                else if(i+1 <= map.length && j+1 <= map[i].length) //sağaltçapraz
-                {
-                    if(map[i+1][j+1] == " * ")
-                        count++;
-                }
+            System.out.println("Sütun giriniz:");
+            int column = out.nextInt();
 
-                for(int i2 = 0; i2<map.length; i2++)
+            if (column > this.weight-1 || column < 0)
+            {
+                System.out.println("Aralık dışı sütun girdiniz");
+                continue;
+            }
+
+            int sayi2;
+
+            sayi2= this.control(row, column);
+            if(sayi2==-500)
+            {
+                System.out.println("Mayına bastınız. Oyun bitti!");
+                String sayi=" * ";
+                durum=false;
+                tahta[row][column]=sayi;
+                System.out.println("/////////////");
+                this.print(tahta);
+
+            }
+            else
+            {
+                tahta[row][column]= " " + sayi2 + " ";
+                System.out.println("/////////////");
+                this.print(tahta);
+            }
+
+        } while (durum);
+
+    }
+
+    int control(int x, int y)
+    {
+        int counter=0;
+        System.out.println(x+"-"+y+"-"+tahtaHarita[x][y]);
+
+        if(this.tahtaHarita[x][y]==" * ")
+        {
+            return -500;
+        }
+        else if(this.tahtaHarita[x][y]==" - ")
+        {
+            if( x+1<=this.height-1) //alt
+            {
+                if(this.tahtaHarita[x+1][y]==" * ")
                 {
-                    for(int j2 = 0; j2<map[i2].length; j2++)
-                    {
-
-                        map[i2][j2]= String.valueOf(count);
-                    }
-
+                    counter++;
+                    System.out.println("???");
                 }
 
             }
+            if(x>0)//üst
+            {
+                if (this.tahtaHarita[x - 1][y] == " * ")
+                {
+                    counter++;
+                }
+            }
+            if(y+1<=this.weight-1)//sağ
+            {
+                if(this.tahtaHarita[x][y+1]==" * ")
+                {
+                    counter++;
+                }
+            }
+            if(y>0)
+            {
+                if(this.tahtaHarita[x][y-1]==" * ")
+                {
+                    counter++;
+                }
+            }
+            if(x>0 && y>0)
+            {
+                if(this.tahtaHarita[x-1][y-1]==" * ")//solUstÇarpraz
+                {
+                    counter++;
+                }
+            }
+            if(x+1<=this.height-1 && y+1<=this.weight-1)
+            {
+                if(this.tahtaHarita[x+1][y+1]==" * ")//sağAltÇarpraz
+                {
+                    counter++;
+                }
+            }
+            if(x+1<=this.height-1 && y>0)
+            {
+                if(this.tahtaHarita[x+1][y-1]==" * ")//solAltÇArpraz
+                {
+                    counter++;
+                    System.out.println("?");
+
+                }
+            }
+            if(x>0 && y+1<this.weight-1)
+            {
+                if(this.tahtaHarita[x-1][y+1]==" * ")//sağÜstÇArpraz
+                {
+                    counter++;
+                    System.out.println("?");
+                }
+            }
+
         }
+        return counter;
+
     }
 
-
+    void print(String [][] ekran)
+    {
+        for(String [] row : ekran)
+        {
+            for(String j : row)
+            {
+                System.out.print(" "+j+" ");
+            }
+            System.out.println("");
+        }
+    }
 
 
 
